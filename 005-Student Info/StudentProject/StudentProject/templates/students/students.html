@@ -1,0 +1,144 @@
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+<title>Students</title>
+</head>
+<body>
+<h1>Student Names</h1>
+{% for student in students %}
+<p>{{student}}</p>
+{% endfor %}
+</body>
+</html> {% endcomment %}
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+<title>Student Details</title>
+</head>
+<body>
+<h1>Student Details</h1>
+{% for i in students %}
+<p>Name : {{i.name}}</p>
+<p>Course : {{i.course}}</p>
+<p>City : {{i.city}}</p>
+<hr>
+{% endfor %}
+</body>
+</html> {% endcomment %}
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+<title>Student Details</title>
+</head>
+<body>
+<h1>Student Details</h1>
+<table border="1">
+<tr>
+<th>Name</th>
+<th>Course</th>
+<th>City</th>
+<th>Email</th>
+<td>{{i.email}}</td>
+</tr>
+{% for i in students %}
+<tr>
+<td>{{i.name}}</td>
+<td>{{i.course}}</td>
+<td>{{i.city}}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html> {% endcomment %}
+
+{% comment %}  {% endcomment %}
+
+{% comment %} {% if students %}
+{% for i in students %}
+<p>Name : {{i.name}}</p>
+<p>Course : {{i.course}}</p>
+<p>City : {{i.city}}</p>
+<p>Email : {{i.email}}</p>
+<hr>
+{% endfor %}
+{% else %}
+<h2>No student records available</h2>
+{% endif %} {% endcomment %}
+
+{% comment %} Step 30 : Apply filters to student data {% endcomment %}
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+<title>Student Details</title>
+</head>
+<body>
+<h1>Student Details</h1>
+<h2>Total Students : {{students|length}}</h2>
+{% for i in students %}
+<p>Name : {{i.name|upper}}</p>
+<p>Course : {{i.course|title}}</p>
+<p>City : {{i.city|lower}}</p>
+<p>Email : {{i.email}}</p>
+<hr>
+{% endfor %}
+</body>
+</html> {% endcomment %}
+
+{% comment %} Step 33 : Display Student Serial Number {% endcomment %}
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+<title>Student Details</title>
+</head>
+<body>
+<h1>Student Details</h1>
+{% for i in students %}
+<p>{{forloop.counter}}. {{i.name}}</p>
+<p>Course : {{i.course}}</p>
+<p>City : {{i.city}}</p>
+<p>Email : {{i.email}}</p>
+<hr>
+{% endfor %}
+</body>
+</html> {% endcomment %}
+
+{% comment %} Display the student list with serial numbers in a table {% endcomment %}
+{% comment %} 
+<table border="1">
+<tr>
+<th>Sl.No</th>
+<th>Name</th>
+<th>Course</th>
+<th>City</th>
+<th>Email</th>
+</tr>
+{% for i in students %}
+<tr>
+<td>{{forloop.counter}}</td>
+<td>{{i.name}}</td>
+<td>{{i.course}}</td>
+<td>{{i.city}}</td>
+<td>{{i.email}}</td>
+</tr>
+{% endfor %}
+</table> {% endcomment %}
+
+{% comment %} Step 35 : Display the last student separately {% endcomment %}
+{% comment %} {% for i in students %}
+<p>{{forloop.counter}}. {{i.name}}</p>
+{% if forloop.last %}
+<h3>This is the last student: {{i.name}}</h3>
+{% endif %}
+{% endfor %} {% endcomment %}
+
+{% comment %} Step 36 : Display the first student separately {% endcomment %}
+{% for i in students %}
+{% if forloop.first %}
+<h3>First Student : {{i.name}}</h3>
+{% endif %}
+<p>{{i.name}}</p>
+{% endfor %}
+

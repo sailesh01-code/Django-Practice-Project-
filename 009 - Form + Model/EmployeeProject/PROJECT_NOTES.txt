@@ -1,0 +1,57 @@
+EmployeeProject Important Notes
+===============================
+
+1. MySQL database configuration
+   - The Django project uses MySQL.
+   - The configured database name is GITAMCAB.
+   - The MySQL user is root.
+   - Ensure the MySQL server is running before starting Django.
+   - The database must exist before running migrations.
+
+2. Initialize or update the database
+   Run these commands from the project folder:
+
+   python manage.py makemigrations
+   python manage.py migrate
+
+3. Start the Django server
+
+   python manage.py runserver
+
+   Open this URL in the browser:
+
+   http://127.0.0.1:8000/EmployeeInfoApp/
+   http://127.0.0.1:8000/EmployeeInfoApp/form/
+
+4. Application URLs
+   - Employee form: /EmployeeInfoApp/form/
+   - Display all employee records: /EmployeeInfoApp/display/
+   - The application root /EmployeeInfoApp/ opens the employee form.
+
+5. Form submission
+   - EmployeeForm is a regular Django Form.
+   - Regular forms do not have a save() method.
+   - The view saves validated form data through the Employee model.
+   - Invalid form data is returned to the form page with validation errors.
+
+6. View employee data in MySQL
+   Open MySQL and run:
+
+   SHOW DATABASES;
+
+   USE GITAMCAB;
+
+   SHOW TABLES;
+
+   SELECT * FROM EmployeeInfoApp_employee;
+
+7. Useful MySQL inspection commands
+
+   DESCRIBE EmployeeInfoApp_employee;
+
+   SELECT name, desg, age, sal, address
+   FROM EmployeeInfoApp_employee;
+
+Important:
+The Django project uses GITAMCAB. If you select a different database, such as employee_db,
+you will not see the tables created by this project unless Django is configured to use that database.

@@ -1,0 +1,73 @@
+EMPLOYEE PROJECT NOTES
+======================
+
+WHAT WAS CHANGED
+----------------
+1. The Employee model requires these fields:
+   - name
+   - desg
+   - age
+   - sal
+   - address
+
+2. EmployeeForm was updated to include all required model fields.
+   The form now collects name, designation, age, salary, and address.
+
+3. The previous error happened because the form included only name.
+   Django then tried to save age and the other required fields as NULL,
+   which caused: Column 'age' cannot be null.
+
+HOW TO RUN THE PROJECT
+----------------------
+1. Open PowerShell in this project folder:
+
+   cd "D:\vs code\DJANGO\010 - Model Based Form\EmployeeProject"
+
+2. Apply database migrations:
+
+   python manage.py makemigrations
+   python manage.py migrate
+
+3. Check the project for configuration errors:
+
+   python manage.py check
+
+4. Start the Django development server:
+
+   python manage.py runserver
+
+5. Open this URL in a browser:
+
+   http://127.0.0.1:8000/employees/employee-form/
+
+MYSQL COMMANDS
+--------------
+The Django settings use database GITAMCAB.
+The Django employee table is employees_employee.
+
+Open MySQL and run:
+
+USE GITAMCAB;
+
+SHOW TABLES;
+
+INSERT INTO employees_employee
+    (name, desg, age, sal, address)
+VALUES
+    ('Sita', 'Manager', 30, 45000, 'Delhi');
+
+SELECT * FROM employees_employee;
+
+To find one employee:
+
+SELECT *
+FROM employees_employee
+WHERE name = 'Sita';
+
+Do not insert the id manually. Django/MySQL generates it automatically.
+
+IMPORTANT
+---------
+Use employees_employee for this project. Do not query
+EmployeeInfoApp_employee because that belongs to a different Django app
+or project and will not show records created by this project.

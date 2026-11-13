@@ -1,0 +1,628 @@
+Task Management System - Project Notes
+======================================
+
+Reference used:
+- Minor Project-part1-11.pdf
+
+Project purpose:
+This Django project is a Task Management System. It allows users to add tasks,
+view tasks, update tasks, mark tasks as completed, move completed tasks back to
+pending, delete tasks, search/filter tasks, view dashboard statistics, and manage
+records through Django Admin.
+
+
+How To Run This Project
+-----------------------
+
+1. Open VS Code terminal.
+
+2. Go to the project folder:
+
+   cd "D:\vs code\DJANGO\011 - Minor Project - Task Management System\TaskManagementSystem"
+
+3. Run the server:
+
+   python manage.py runserver
+
+4. Open the home page:
+
+   http://127.0.0.1:8000/
+
+
+Important Links
+---------------
+
+Home page:
+http://127.0.0.1:8000/
+
+Admin panel:
+http://127.0.0.1:8000/admin/
+
+Dashboard:
+http://127.0.0.1:8000/dashboard/
+
+All tasks:
+http://127.0.0.1:8000/tasks/
+
+Add task:
+http://127.0.0.1:8000/tasks/create/
+
+Pending tasks:
+http://127.0.0.1:8000/tasks/pending/
+
+Completed tasks:
+http://127.0.0.1:8000/tasks/completed/
+
+Search task by title:
+http://127.0.0.1:8000/tasks/?search=django
+
+Filter pending tasks:
+http://127.0.0.1:8000/tasks/?status=pending
+
+Filter completed tasks:
+http://127.0.0.1:8000/tasks/?status=completed
+
+Update task example:
+http://127.0.0.1:8000/tasks/4/edit/
+
+Task details example:
+http://127.0.0.1:8000/tasks/4/
+
+
+Current Project Records
+-----------------------
+
+Current task summary:
+- Total tasks: 10
+- Completed tasks: 6
+- Pending tasks: 4
+
+Current task records:
+- 14 | Buy a iphone | Completed
+- 13 | Market | Pending
+- 9  | Friends Trip | Pending
+- 8  | Reading a books | Completed
+- 7  | Travel | Completed
+- 5  | Office Work | Pending
+- 4  | Exam Study | Pending
+- 3  | Java Program | Completed
+- 2  | Prepare Project Presentation | Completed
+- 1  | Complete Django Assignment | Completed
+
+Database note:
+This project currently uses SQLite, not MySQL.
+The database file is:
+
+   db.sqlite3
+
+The task table name is:
+
+   tasks_task
+
+
+Useful Commands
+---------------
+
+Create migrations:
+
+   python manage.py makemigrations
+
+Apply migrations:
+
+   python manage.py migrate
+
+Create admin user:
+
+   python manage.py createsuperuser
+
+Run project:
+
+   python manage.py runserver
+
+See migrations:
+
+   python manage.py showmigrations
+
+Open Django shell:
+
+   python manage.py shell
+
+Show all task records using Django shell:
+
+   python -X utf8 manage.py shell -c "from tasks.models import Task; print(list(Task.objects.values('id','title','description','completed','created_at')))"
+
+
+Part 1 - Project Setup
+----------------------
+
+Purpose:
+Create the Django project, create the tasks app, connect URLs, add templates,
+create the home page, and run the project.
+
+Main commands:
+
+   django-admin startproject TaskManagementSystem
+   cd TaskManagementSystem
+   python manage.py startapp tasks
+   python manage.py runserver
+
+Files used:
+- TaskManagementSystem/settings.py
+- TaskManagementSystem/urls.py
+- tasks/urls.py
+- tasks/views.py
+- templates/tasks/home.html
+
+Important work:
+- Add "tasks" to INSTALLED_APPS.
+- Configure the templates folder.
+- Connect tasks.urls with the main project urls.py.
+- Create the home view.
+- Create home.html.
+
+Run:
+
+   python manage.py runserver
+
+Open:
+
+   http://127.0.0.1:8000/
+
+
+Part 2 - Task Model and Database
+--------------------------------
+
+Purpose:
+Create the database structure for storing task records.
+
+Files used:
+- tasks/models.py
+- tasks/admin.py
+
+Model used:
+
+   class Task(models.Model):
+       title = models.CharField(max_length=150)
+       description = models.TextField()
+       completed = models.BooleanField(default=False)
+       created_at = models.DateTimeField(auto_now_add=True)
+
+Fields:
+- title: stores task name.
+- description: stores task details.
+- completed: stores task status. False means pending, True means completed.
+- created_at: stores task creation date and time automatically.
+
+Commands:
+
+   python manage.py makemigrations
+   python manage.py migrate
+
+Admin setup:
+- Register Task model in tasks/admin.py.
+- Show title, completed status, and created date in Django Admin.
+- Add filter by completed status.
+- Add search by title.
+
+Open admin:
+
+   http://127.0.0.1:8000/admin/
+
+
+Part 3 - Display Tasks From Database
+------------------------------------
+
+Purpose:
+Fetch task records from the database and display them on the website.
+
+Files used:
+- tasks/views.py
+- tasks/urls.py
+- templates/tasks/task-list.html
+
+Main view:
+
+   def task_list(request):
+       tasks = Task.objects.all().order_by('-created_at')
+       return render(request, 'tasks/task-list.html', {'tasks': tasks})
+
+Important concepts:
+- Task.objects.all() gets all task records.
+- order_by('-created_at') shows newest tasks first.
+- Template loop displays each task.
+- If no tasks exist, show a message.
+
+Open:
+
+   http://127.0.0.1:8000/tasks/
+
+Pending tasks:
+
+   http://127.0.0.1:8000/tasks/pending/
+
+Completed tasks:
+
+   http://127.0.0.1:8000/tasks/completed/
+
+
+Part 4 - Add Tasks Using ModelForm
+----------------------------------
+
+Purpose:
+Allow users to create tasks from the website instead of only using Django Admin.
+
+Files used:
+- tasks/forms.py
+- tasks/views.py
+- tasks/urls.py
+- templates/tasks/task-form.html
+- templates/tasks/task-list.html
+
+Form used:
+
+   class TaskForm(forms.ModelForm):
+       class Meta:
+           model = Task
+           fields = ['title', 'description']
+
+Important concepts:
+- ModelForm creates a form from the Task model.
+- form.is_valid() checks submitted data.
+- form.save() saves the task to the database.
+- redirect('task-list') returns the user to the task list.
+- csrf_token protects the POST form.
+
+Open:
+
+   http://127.0.0.1:8000/tasks/create/
+
+Test task creation:
+1. Open the create page.
+2. Enter title and description.
+3. Click Add Task.
+4. The new task appears in the task list.
+
+
+Part 5 - Update Tasks Using ModelForm
+-------------------------------------
+
+Purpose:
+Allow users to edit an existing task instead of creating a duplicate task.
+
+Files used:
+- tasks/views.py
+- tasks/urls.py
+- templates/tasks/task-form.html
+- templates/tasks/task-list.html
+
+Important concepts:
+- get_object_or_404(Task, id=task_id) finds the selected task.
+- TaskForm(instance=task) loads existing data into the form.
+- TaskForm(request.POST, instance=task) updates the same record.
+
+Open example:
+
+   http://127.0.0.1:8000/tasks/4/edit/
+
+Create vs update:
+- Create uses TaskForm(request.POST).
+- Update uses TaskForm(request.POST, instance=task).
+
+
+Part 6 - Complete and Undo Tasks
+--------------------------------
+
+Purpose:
+Allow users to change task status.
+
+Files used:
+- tasks/views.py
+- tasks/urls.py
+- templates/tasks/task-list.html
+
+Important concepts:
+- Pending task means completed = False.
+- Completed task means completed = True.
+- POST request is used because status changes update the database.
+- csrf_token is required for POST forms.
+
+URLs:
+
+   /tasks/<task_id>/complete/
+   /tasks/<task_id>/undo/
+
+User actions:
+- Pending task shows "Mark as Completed".
+- Completed task shows "Mark as Pending".
+
+
+Part 7 - Delete Tasks
+---------------------
+
+Purpose:
+Allow users to delete a task safely after confirmation.
+
+Files used:
+- tasks/views.py
+- tasks/urls.py
+- templates/tasks/task-confirm-delete.html
+- templates/tasks/task-list.html
+
+Important concepts:
+- Delete page asks for confirmation.
+- The task is deleted only after a POST request.
+- task.delete() removes the record from the database.
+- redirect('task-list') returns the user to the task list.
+
+Delete URL example:
+
+   http://127.0.0.1:8000/tasks/4/delete/
+
+
+Part 8 - Task Search and Filtering
+----------------------------------
+
+Purpose:
+Allow users to find tasks quickly.
+
+Files used:
+- tasks/views.py
+- templates/tasks/task-list.html
+
+Features:
+- Search by title.
+- Filter all tasks.
+- Filter pending tasks.
+- Filter completed tasks.
+- Combine search and status filter.
+
+Important code ideas:
+- request.GET.get('search', '') gets the search text.
+- request.GET.get('status', 'all') gets the selected filter.
+- title__icontains performs a case-insensitive title search.
+
+Open all tasks:
+
+   http://127.0.0.1:8000/tasks/
+
+Pending filter:
+
+   http://127.0.0.1:8000/tasks/?status=pending
+
+Completed filter:
+
+   http://127.0.0.1:8000/tasks/?status=completed
+
+Search example:
+
+   http://127.0.0.1:8000/tasks/?search=django
+
+
+Part 9 - Task Dashboard
+-----------------------
+
+Purpose:
+Show task statistics and recent tasks.
+
+Files used:
+- tasks/views.py
+- tasks/urls.py
+- templates/tasks/dashboard.html
+
+Dashboard shows:
+- Total tasks
+- Pending tasks
+- Completed tasks
+- Completion percentage
+- Recent tasks
+
+Completion percentage:
+
+   completion_percentage = round((completed_tasks / total_tasks) * 100)
+
+The view checks total_tasks first to avoid division by zero.
+
+Open:
+
+   http://127.0.0.1:8000/dashboard/
+
+Current dashboard values:
+- Total Tasks: 10
+- Pending Tasks: 4
+- Completed Tasks: 6
+- Completion: 60%
+
+
+Part 10 - Improve Task List With Better Structure
+-------------------------------------------------
+
+Purpose:
+Make the task list easier to use by adding navigation, task actions, and a
+details page.
+
+Files used:
+- templates/tasks/task-list.html
+- templates/tasks/task-detail.html
+- tasks/views.py
+- tasks/urls.py
+
+Task list includes:
+- Dashboard link
+- Add Task link
+- Search box
+- All/Pending/Completed filters
+- Task title link
+- Description
+- Created date
+- Status
+- Complete or pending button
+- Edit link
+- Delete link
+
+Task details page:
+
+   http://127.0.0.1:8000/tasks/4/
+
+Navigation flow:
+
+   Dashboard -> Task List -> Task Details -> Edit Task
+
+
+Part 11 - Django Messages
+-------------------------
+
+Purpose:
+Show feedback messages after important actions.
+
+Files used:
+- tasks/views.py
+- templates/tasks/task-list.html
+
+Messages used:
+- Task added successfully.
+- Task updated successfully.
+- Task marked as completed.
+- Task moved back to pending.
+- Task deleted successfully.
+
+Important concepts:
+- Import messages from django.contrib.
+- Use messages.success() for successful actions.
+- Use messages.info() for informational actions.
+- Display messages in the template using the messages context variable.
+
+
+Full Route List
+---------------
+
+Home:
+http://127.0.0.1:8000/
+
+Admin:
+http://127.0.0.1:8000/admin/
+
+Dashboard:
+http://127.0.0.1:8000/dashboard/
+
+All tasks:
+http://127.0.0.1:8000/tasks/
+
+Create task:
+http://127.0.0.1:8000/tasks/create/
+
+Task details:
+http://127.0.0.1:8000/tasks/<task_id>/
+
+Edit task:
+http://127.0.0.1:8000/tasks/<task_id>/edit/
+
+Delete task:
+http://127.0.0.1:8000/tasks/<task_id>/delete/
+
+Mark completed:
+http://127.0.0.1:8000/tasks/<task_id>/complete/
+
+Mark pending:
+http://127.0.0.1:8000/tasks/<task_id>/undo/
+
+Pending tasks:
+http://127.0.0.1:8000/tasks/pending/
+
+Completed tasks:
+http://127.0.0.1:8000/tasks/completed/
+
+
+Project Files Summary
+---------------------
+
+manage.py:
+Runs Django management commands.
+
+TaskManagementSystem/settings.py:
+Project settings, installed apps, database, templates, timezone, static files.
+
+TaskManagementSystem/urls.py:
+Main URL file. Connects admin and tasks app URLs.
+
+tasks/models.py:
+Contains the Task model.
+
+tasks/admin.py:
+Registers Task model in Django Admin.
+
+tasks/forms.py:
+Contains TaskForm ModelForm.
+
+tasks/views.py:
+Contains page logic for home, dashboard, list, create, update, delete, complete,
+undo, pending, completed, and details.
+
+tasks/urls.py:
+Contains all app routes.
+
+templates/tasks/home.html:
+Home page.
+
+templates/tasks/task-list.html:
+Main task list page.
+
+templates/tasks/task-form.html:
+Add/update task form.
+
+templates/tasks/task-detail.html:
+Single task details page.
+
+templates/tasks/task-confirm-delete.html:
+Delete confirmation page.
+
+templates/tasks/dashboard.html:
+Task dashboard page.
+
+
+SQLite Commands For Current Database
+------------------------------------
+
+Open the SQLite database:
+
+   sqlite3 db.sqlite3
+
+Show all tables:
+
+   .tables
+
+Show all task records:
+
+   SELECT id, title, description, completed, created_at
+   FROM tasks_task
+   ORDER BY created_at DESC;
+
+Count total tasks:
+
+   SELECT COUNT(*) FROM tasks_task;
+
+Count completed tasks:
+
+   SELECT COUNT(*) FROM tasks_task WHERE completed = 1;
+
+Count pending tasks:
+
+   SELECT COUNT(*) FROM tasks_task WHERE completed = 0;
+
+
+MySQL Note
+----------
+
+The current project is configured for SQLite. MySQL will not show the existing
+10 task records unless the project is changed to use MySQL and the data is
+migrated or inserted there.
+
+If MySQL is used later, Django migrations will create tables such as:
+- auth_group
+- auth_permission
+- auth_user
+- django_admin_log
+- django_content_type
+- django_migrations
+- django_session
+- tasks_task
+

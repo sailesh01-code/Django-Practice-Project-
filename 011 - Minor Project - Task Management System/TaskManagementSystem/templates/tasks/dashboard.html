@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Task Dashboard</title>
+</head>
+<body>
+<h1>Task Dashboard</h1>
+<div>
+<h2>Total Tasks</h2>
+<p>{{ total_tasks }}</p>
+</div>
+<div>
+<h2>Pending Tasks</h2>
+<p>{{ pending_tasks }}</p>
+</div>
+<div>
+<h2>Completed Tasks</h2>
+<p>{{ completed_tasks }}</p>
+</div>
+<div>
+<h2>Completion</h2>
+<p>{{ completion_percentage }}%</p>
+</div>
+
+<h2>Recent Tasks</h2>
+{% for task in recent_tasks %}
+<div>
+<h3>{{ task.title }}</h3>
+{% if task.completed %}
+<p>Completed</p>
+{% else %}
+<p>Pending</p>
+{% endif %}
+</div>
+{% empty %}
+<p>No tasks available.</p>
+{% endfor %}
+
+<a href="{% url 'task-list' %}">View Tasks</a>
+</body>
+</html>

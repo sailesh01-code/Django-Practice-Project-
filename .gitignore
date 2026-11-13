@@ -1,0 +1,13 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+
+# Local databases and environment files
+*.sqlite3
+*.db
+.env
+.env.*
+
+# Virtual environments
+.venv/
+venv/

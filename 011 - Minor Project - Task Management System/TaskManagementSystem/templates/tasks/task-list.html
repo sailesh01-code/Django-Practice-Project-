@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Task Management System</title>
+</head>
+<body>
+<h1>Task Management System</h1>
+<nav>
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<a href="{% url 'task-create' %}">Add Task</a>
+</nav>
+
+{% if messages %}
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+
+<h2>Tasks</h2>
+<form method="GET">
+<input type="text" name="search" value="{{ search }}" placeholder="Search tasks">
+<button type="submit">Search</button>
+</form>
+<p>
+<a href="?search={{ search|urlencode }}&status=all">All</a>
+<a href="?search={{ search|urlencode }}&status=pending">Pending</a>
+<a href="?search={{ search|urlencode }}&status=completed">Completed</a>
+</p>
+
+{% for task in tasks %}
+<div>
+<h3><a href="{% url 'task-detail' task.id %}">{{ task.title }}</a></h3>
+<p>{{ task.description }}</p>
+<p>Created: {{ task.created_at }}</p>
+{% if task.completed %}
+<p>Status: Completed</p>
+<form method="POST" action="{% url 'task-undo' task.id %}">
+{% csrf_token %}
+<button type="submit">Mark as Pending</button>
+</form>
+{% else %}
+<p>Status: Pending</p>
+<form method="POST" action="{% url 'task-complete' task.id %}">
+{% csrf_token %}
+<button type="submit">Mark as Completed</button>
+</form>
+{% endif %}
+<a href="{% url 'task-update' task.id %}">Edit</a>
+<a href="{% url 'task-delete' task.id %}">Delete</a>
+</div>
+<hr>
+{% empty %}
+<p>No tasks found.</p>
+{% endfor %}
+
+{# Old code from before Part 10. #}
+{# <!DOCTYPE html> #}
+{# <html> #}
+{# <head> #}
+{# <title>Tasks</title> #}
+{# </head> #}
+{# <body> #}
+{# <h1>Task Management System</h1> #}
+{#  #}
+{# {% comment %} <a href="{% url 'task-create' %}">Add New Task</a> #}
+{# <h2>All Tasks</h2> #}
+{# <h2>Task Summary</h2> #}
+{# <p>Total Tasks: {{ total_tasks }}</p> #}
+{# <p>Pending Tasks: {{ pending_tasks }}</p> #}
+{# <p>Completed Tasks: {{ completed_tasks }}</p> {% endcomment %} #}
+{#  #}
+{# {% comment %} <a href="{% url 'task-create' %}">Add New Task</a> {% endcomment %} #}
+{# <a href="{% url 'dashboard' %}">Dashboard</a> #}
+{# <a href="{% url 'task-create' %}">Add Task</a> #}
+{# <form method="GET"> #}
+{# <input type="text" name="search" value="{{ search }}" placeholder="Search tasks"> #}
+{# <input type="hidden" name="status" value="{{ status }}"> #}
+{# <button type="submit">Search</button> #}
+{# </form> #}
+{# <p> #}
+{# <a href="?search={{ search|urlencode }}&status=all">All</a> #}
+{# <a href="?search={{ search|urlencode }}&status=pending">Pending</a> #}
+{# <a href="?search={{ search|urlencode }}&status=completed">Completed</a> #}
+{# </p> #}
+{# {% if search %} #}
+{# <p>Search results for: {{ search }}</p> #}
+{# {% endif %} #}
+{# <h2>All Tasks</h2> #}
+{# <h2>Task Summary</h2> #}
+{# <p>Total Tasks: {{ total_tasks }}</p> #}
+{# <p>Pending Tasks: {{ pending_tasks }}</p> #}
+{# <p>Completed Tasks: {{ completed_tasks }}</p> #}
+{#  #}
+{# {% for task in tasks %} #}
+{# <div> #}
+{# <h3>{{ task.title }}</h3> #}
+{# <p>{{ task.description }}</p> #}
+{# {% comment %} #}
+{# {% if task.completed %} #}
+{# <p>Status: Completed</p> #}
+{# {% else %} #}
+{# <p>Status: Pending</p> #}
+{# {% endif %} #}
+{# {% endcomment %} #}
+{# {% if task.completed %} #}
+{# <p>Status: Completed</p> #}
+{# <form method="POST" action="{% url 'task-undo' task.id %}"> #}
+{# {% csrf_token %} #}
+{# <button type="submit">Mark as Pending</button> #}
+{# </form> #}
+{# {% else %} #}
+{# <p>Status: Pending</p> #}
+{# <form method="POST" action="{% url 'task-complete' task.id %}"> #}
+{# {% csrf_token %} #}
+{# <button type="submit">Mark as Completed</button> #}
+{# </form> #}
+{# {% endif %} #}
+{# <p>Created: {{ task.created_at }}</p> #}
+{# <a href="{% url 'task-update' task.id %}">Edit</a> #}
+{# <form method="GET" action="{% url 'task-delete' task.id %}"> #}
+{# <button type="submit">Delete</button> #}
+{# </form> #}
+{# </div> #}
+{# {% empty %} #}
+{# {% comment %} #}
+{# Old code: #}
+{# <p>No tasks available.</p> #}
+{# {% endcomment %} #}
+{# <p>No matching tasks found.</p> #}
+{# {% endfor %} #}
+{# </body> #}
+{# </html> #}
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Task Details</title>
+</head>
+<body>
+<h1>Task Details</h1>
+<h2>{{ task.title }}</h2>
+<p>{{ task.description }}</p>
+<p>Created: {{ task.created_at }}</p>
+{% if task.completed %}
+<p>Status: Completed</p>
+{% else %}
+<p>Status: Pending</p>
+{% endif %}
+<a href="{% url 'task-update' task.id %}">Edit Task</a>
+<a href="{% url 'task-list' %}">Back to Tasks</a>
+</body>
+</html>

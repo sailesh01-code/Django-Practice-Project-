@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Home</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+{% comment %} <h1>Welcome to Student Management System</h1> {% endcomment %}
+
+<h1 id="title">Welcome to Student Management System</h1>
+
+<h2>Sailesh Kumar Panda</h2>
+<p>Full Stack Python Training</p>
+<img src="{% static 'images/django-python-logo.png' %}" width="100">
+<script src="{% static 'js/script.js' %}"></script>
+<button onclick="showMessage()">Click Here</button>
+</body>
+</html>
